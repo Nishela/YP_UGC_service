@@ -136,3 +136,4 @@ dmypy.json
 /docker.env
 /api_service/dump.rdb
 /local.env
+/bitnami
