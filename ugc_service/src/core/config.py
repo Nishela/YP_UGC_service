@@ -1,15 +1,13 @@
 import os
 from logging import config as logging_config
-from typing import Callable
 
-import backoff as backoff
 from dotenv import load_dotenv
 from pydantic import BaseSettings, Field
 
 from src.core import LOGGING
 
 __all__ = (
-    'BACKOFF_CONFIG',
+    'KAFKA_PRODUCER_CONFIG',
 )
 
 load_dotenv()
@@ -21,10 +19,10 @@ PROJECT_NAME = os.getenv('PROJECT_NAME', 'UGC')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-class BackoffSettings(BaseSettings):
-    wait_gen: Callable = Field(backoff.expo)
-    exception: type = Field(Exception)
-    max_tries: int = Field(..., env='BACKOFF_MAX_RETRIES')
+class KafkaProducerSettings(BaseSettings):
+    KAFKA_BOOTSTRAP_SERVERS: str = Field(..., env='KAFKA_BOOTSTRAP_SERVERS')
+    KAFKA_TOPIC: str = Field('test')
+    KAFKA_CONSUMER_GROUP: str = Field("group-id")
 
 
-BACKOFF_CONFIG = BackoffSettings().dict()
+KAFKA_PRODUCER_CONFIG = KafkaProducerSettings()
