@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel
 
 __all__ = (
@@ -8,14 +10,10 @@ __all__ = (
 
 class EventModel(BaseModel):
     key: str
-    value: str
-    timestamp: float = 0
-    headers: dict = {}
+    value: Any
 
 
 class ProducerResponseModel(BaseModel):
     key: str
-    value: str
-    timestamp: float = 0
-    headers: dict = {}
+    value: Any
     topic: str
