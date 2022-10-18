@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 
 import uvicorn
@@ -23,7 +24,12 @@ loop = asyncio.get_event_loop()
 
 @app.on_event('startup')
 async def startup():
-    producer.producer = AIOKafkaProducer(bootstrap_servers=KAFKA_PRODUCER_CONFIG.KAFKA_BOOTSTRAP_SERVERS, loop=loop)
+    producer.producer = AIOKafkaProducer(
+        bootstrap_servers=KAFKA_PRODUCER_CONFIG.KAFKA_BOOTSTRAP_SERVERS,
+        loop=loop,
+        key_serializer=lambda x: x.encode('utf-8'),
+        value_serializer=lambda x: json.dumps(x).encode('utf-8'),
+    )
 
 
 @app.on_event('shutdown')
