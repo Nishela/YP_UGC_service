@@ -1,8 +1,8 @@
-version: '3.3'
+version: '3.9'
 
 services:
   zookeeper:
-    image: 'bitnami/zookeeper:3.7.0'
+    image: bitnami/zookeeper:latest
     container_name: zookeeper
     ports:
       - '2181:2181'
@@ -12,7 +12,7 @@ services:
       - ./bitnami/zookeeper:/bitnami/zookeeper
 
   kafka:
-    image: 'bitnami/kafka:2.8.0'
+    image: bitnami/kafka:latest
     container_name: kafka
     ports:
       - "9093:9093"
@@ -57,16 +57,17 @@ services:
       - zookeeper
 
   clickhouse-node2:
-    image: yandex/clickhouse-server
+    image: yandex/clickhouse-server:latest
     container_name: clickhouse-node2
     hostname: clickhouse-node2
+    platform: 'linux/amd64'
     volumes:
       - ./data/node2:/etc/clickhouse-server
     depends_on:
       - zookeeper
 
   clickhouse-node3:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:latest
     container_name: clickhouse-node3
     hostname: clickhouse-node3
     volumes:
@@ -75,7 +76,7 @@ services:
       - zookeeper
 
   clickhouse-node4:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:latest
     container_name: clickhouse-node4
     hostname: clickhouse-node4
     volumes:
