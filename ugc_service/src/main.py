@@ -30,11 +30,12 @@ async def startup():
         key_serializer=lambda x: x.encode('utf-8'),
         value_serializer=lambda x: json.dumps(x).encode('utf-8'),
     )
+    await producer.producer.start()
 
 
 @app.on_event('shutdown')
 async def shutdown():
-    ...
+    await producer.producer.stop()
 
 
 app.include_router(events.router, prefix='/ugc_service/v1/producer', tags=['producer'])
