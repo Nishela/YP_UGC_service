@@ -1,6 +1,6 @@
 import os
 from logging import config as logging_config
-from enum import Enum
+
 from dotenv import load_dotenv
 from pydantic import BaseSettings, Field
 
@@ -19,9 +19,9 @@ PROJECT_NAME = os.getenv('PROJECT_NAME', 'UGC')
 # Корень проекта
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-AVAILABLE_TOPICS = {
-    'views',
-}
+
+class AvailableTopics(BaseSettings):
+    views = 'views'
 
 
 class KafkaProducerSettings(BaseSettings):
@@ -31,3 +31,4 @@ class KafkaProducerSettings(BaseSettings):
 
 
 KAFKA_PRODUCER_CONFIG = KafkaProducerSettings()
+AVAILABLE_TOPICS = AvailableTopics().dict()
