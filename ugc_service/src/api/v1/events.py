@@ -1,23 +1,19 @@
 from http import HTTPStatus
+from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
+from src.api.v1.schemas import EventSchema
 from src.core import AVAILABLE_TOPICS
-from src.kafka_ugc.producer import get_producer
-from src.models.producer_models import EventModel, ProducerResponseModel
+from src.models import EventModel
 
 router = APIRouter()
 
 
-@router.post('/send_event/{topic}', response_model=ProducerResponseModel)
-async def send_event(event: EventModel, topic: str) -> ProducerResponseModel:
-    if topic not in AVAILABLE_TOPICS:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='topic not available')
-    producer = await get_producer()
-    try:
-        await producer.start()
-        await producer.send_and_wait(topic, **event.dict())
-    finally:
-        await producer.stop()
-    response = ProducerResponseModel(topic=topic, **event.dict())
-    return response
+@router.post('/send_event', response_model=Any)
+async def send_event(event: EventSchema) -> Any:
+    if not (topic := AVAILABLE_TOPICS.get(event.event_name)):
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
+    event_instance = EventModel(**event.dict())
+    await event_instance.producer.async_post_event(event_instance, topic)
+    return {"status": 200}  # подумать нужен ли ответ вообще
