@@ -60,7 +60,6 @@ services:
     image: yandex/clickhouse-server:latest
     container_name: clickhouse-node2
     hostname: clickhouse-node2
-    platform: 'linux/amd64'
     volumes:
       - ./data/node2:/etc/clickhouse-server
     depends_on:

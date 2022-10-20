@@ -9,7 +9,7 @@ class ModelProducer:
     model: Any
 
     @staticmethod
-    async def async_post_event(instance, topic):
+    async def async_post_event(instance, topic: str) -> None:
         producer = await get_producer()
         await producer.send_and_wait(
             topic=topic,

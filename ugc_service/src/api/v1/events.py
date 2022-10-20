@@ -10,10 +10,10 @@ from src.models import EventModel
 router = APIRouter()
 
 
-@router.post('/send_event', response_model=Any)
+@router.post('/send_event', response_model=HTTPStatus)
 async def send_event(event: EventSchema) -> Any:
     if not (topic := AVAILABLE_TOPICS.get(event.event_name)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
     event_instance = EventModel(**event.dict())
     await event_instance.producer.async_post_event(event_instance, topic)
-    return {"status": 200}  # подумать нужен ли ответ вообще
+    return HTTPStatus.CREATED
