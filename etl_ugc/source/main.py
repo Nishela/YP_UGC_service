@@ -4,11 +4,11 @@ from clickhouse_driver.errors import Error
 from kafka import KafkaConsumer
 from kafka.errors import KafkaError
 
-from core import CH_CONFIG, APP_CONFIG
-from core import KAFKA_CONSUMER_CONFIG as KAFKA_CONF
-from workers import ETLClickhouse
-from workers import ETLKafkaConsumer
-from workers import batcher, transform
+from source.utils import CH_CONFIG, APP_CONFIG
+from source.utils import KAFKA_CONSUMER_CONFIG as KAFKA_CONF
+from source.workers import ETLClickhouse
+from source.workers import ETLKafkaConsumer
+from source.workers import batcher, transform
 
 
 def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int = 10):
@@ -18,12 +18,16 @@ def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int
     while True:
         try:
             batches = []
+            batch_count = 0
             for message in kafka_consumer:
                 batches.append(transform(message))
-                if len(batches) == batch_size:
-                    prepared_bathes = batcher(batches)
-                    ch_driver.insert(prepared_bathes)
-                    batches = []
+                batch_count += 1
+
+                if batch_count == batch_size:
+                    ch_driver.insert(batcher(batches))
+                    batches.clear()
+                    batch_count = 0
+
         except KafkaError as _err:
             logging.exception(f"Kafka error: {_err}")
 
