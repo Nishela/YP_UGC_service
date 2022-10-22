@@ -3,9 +3,9 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
-from src.api.v1.schemas import EventSchema
-from src.core import AVAILABLE_TOPICS
-from src.models import EventModel
+from ugc_service.src.api.v1.schemas import EventSchema
+from ugc_service.src.core import AVAILABLE_TOPICS
+from ugc_service.src.models import EventModel
 
 router = APIRouter()
 

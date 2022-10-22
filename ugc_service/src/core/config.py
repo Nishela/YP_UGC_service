@@ -4,7 +4,7 @@ from logging import config as logging_config
 from dotenv import load_dotenv
 from pydantic import BaseSettings, Field
 
-from src.core import LOGGING
+from ugc_service.src.core import LOGGING
 
 __all__ = (
     'KAFKA_PRODUCER_CONFIG',
