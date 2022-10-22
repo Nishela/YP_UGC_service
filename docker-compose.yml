@@ -52,7 +52,7 @@ services:
       - "8123:8123"
       - "9000:9000"
     volumes:
-      - ./data/node1:/etc/clickhouse-server
+      - ./etl_ugc/data/node1:/etc/clickhouse-server
     depends_on:
       - zookeeper
 
@@ -62,7 +62,7 @@ services:
     hostname: clickhouse-node2
     platform: 'linux/amd64'
     volumes:
-      - ./data/node2:/etc/clickhouse-server
+      - ./etl_ugc/data/node2:/etc/clickhouse-server
     depends_on:
       - zookeeper
 
@@ -71,7 +71,7 @@ services:
     container_name: clickhouse-node3
     hostname: clickhouse-node3
     volumes:
-      - ./data/node3:/etc/clickhouse-server
+      - ./etl_ugc/data/node3:/etc/clickhouse-server
     depends_on:
       - zookeeper
 
@@ -80,6 +80,18 @@ services:
     container_name: clickhouse-node4
     hostname: clickhouse-node4
     volumes:
-      - ./data/node4:/etc/clickhouse-server
+      - ./etl_ugc/data/node4:/etc/clickhouse-server
     depends_on:
       - zookeeper
+
+  etl-ugc:
+    build:
+      context: ./etl_ugc
+      dockerfile: Dockerfile
+    container_name: etl-ugc
+    depends_on:
+      - kafka
+      - zookeeper
+    env_file:
+      - .env
+    restart: always

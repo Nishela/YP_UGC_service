@@ -1,5 +1,5 @@
-from src.models.model_meta import ModelMeta
-from src.models.models_mixin import ProducerMixin
+from ugc_service.src.models.model_meta import ModelMeta
+from ugc_service.src.models.models_mixin import ProducerMixin
 
 __all__ = (
     'EventModel',

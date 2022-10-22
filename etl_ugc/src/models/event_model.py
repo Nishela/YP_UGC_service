@@ -1,12 +1,12 @@
-from typing import Any
-
 from pydantic import BaseModel
 
-# TODO: в зависимости от того, какую модель определит Серега
-#  -> изменить эту модель
-#  либо же импортировать модель напрямую из UGC сервиса
+__all__ = ('EventModel',)
 
 
 class EventModel(BaseModel):
-    key: str
-    value: Any
+    event_name: str
+    movie_id: str
+    user_id: str
+    event_data: str
+    timestamp: str
+    # TODO: возможно, нужно больше полей и информации для аналитики

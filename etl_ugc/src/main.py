@@ -1,39 +1,48 @@
-import backoff
-from clickhouse_driver import Client
+import logging
+
+from clickhouse_driver.errors import Error
 from kafka import KafkaConsumer
-from kafka.errors import NoBrokersAvailable
+from kafka.errors import KafkaError
 
-from etl_ugc.src.clickhouse import init_database, save_to_clickhouse
-
-# TODO: вынести в env
-CLICKHOUSE_MAIN_HOST = 'clickhouse-node1'
-CLICKHOUSE_ALT_HOSTS = ["clickhouse-node2", "clickhouse-node3", "clickhouse-node4"]
-KAFKA_TOPICS = 'views'
-KAFKA_HOST = '0.0.0.0'
-KAFKA_PORT = 9092
+from core import CH_CONFIG, APP_CONFIG
+from core import KAFKA_CONSUMER_CONFIG as KAFKA_CONF
+from workers import ETLClickhouse
+from workers import ETLKafkaConsumer
+from workers import batcher, transform
 
 
-@backoff.on_exception(backoff.expo, Exception, max_tries=5)
-def insert_to_clickhouse(client: Client, data: list) -> None:
-    save_to_clickhouse(client, data)
+def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int = 10):
+    ch_driver.init_database()
+    logging.info('>>>>  ELT Process was started...  <<<<')
+
+    while True:
+        try:
+            batches = []
+            for message in kafka_consumer:
+                batches.append(transform(message))
+                if len(batches) == batch_size:
+                    prepared_bathes = batcher(batches)
+                    ch_driver.insert(prepared_bathes)
+                    batches = []
+        except KafkaError as _err:
+            logging.exception(f"Kafka error: {_err}")
+
+        except Error as _err:
+            logging.exception(f"ClickHouse error: {_err}")
 
 
-def etl_process(consumer: KafkaConsumer, clickhouse_client: Client) -> None:
-    ...
+def main():
+    ch_driver = ETLClickhouse(db_name=CH_CONFIG.CH_DB,
+                              host=CH_CONFIG.CH_HOST,
+                              tables=CH_CONFIG.TABLES)
+    kafka_consumer = ETLKafkaConsumer(host=KAFKA_CONF.KAFKA_HOST,
+                                      topics=KAFKA_CONF.TOPICS,
+                                      group_id=KAFKA_CONF.GROUP_ID)
+    consumer = kafka_consumer.get_consumer()
+    ch_driver.init_database()
+
+    etl(consumer, ch_driver, batch_size=APP_CONFIG.BATCH_SIZE)
 
 
-@backoff.on_exception(backoff.expo, NoBrokersAvailable)
-def main() -> None:
-    # consumer = KafkaConsumer()
-    clickhouse_client = Client(
-        host=CLICKHOUSE_MAIN_HOST,
-        alt_hosts=CLICKHOUSE_ALT_HOSTS,
-    )
-
-    init_database(clickhouse_client)
-
-    # etl_process(consumer, clickhouse_client)
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

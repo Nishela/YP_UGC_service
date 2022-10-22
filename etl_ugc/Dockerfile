@@ -1,7 +1,7 @@
 FROM python:3.10-slim
 
 
-WORKDIR /etl
+WORKDIR /etl_ugc/
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -12,6 +12,8 @@ COPY requirements.txt .
 RUN pip install --upgrade pip --no-cache-dir\
     && pip install -r requirements.txt --no-cache-dir
 
-COPY etl_ugc .
+COPY . /etl_ugc/
 
-CMD python ./src/main.py
+RUN apt update && apt install -y netcat && chmod +x entrypoin.sh
+
+ENTRYPOINT ./entrypoin.sh && python ./src/main.py
