@@ -29,6 +29,7 @@ async def startup():
         loop=loop,
         key_serializer=lambda x: x.encode('utf-8'),
         value_serializer=lambda x: json.dumps(x).encode('utf-8'),
+        compression_type="gzip"
     )
     await producer.producer.start()
 

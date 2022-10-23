@@ -15,5 +15,8 @@ RUN pip install --upgrade pip --no-cache-dir\
 EXPOSE 8000
 
 COPY ./src .
+COPY entrypoin.sh .
 
-CMD python main.py
+RUN apt update && apt install -y netcat && chmod +x entrypoin.sh
+
+ENTRYPOINT ./entrypoin.sh && python main.py
