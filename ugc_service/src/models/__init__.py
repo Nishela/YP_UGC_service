@@ -1,1 +1,1 @@
-from .models import *
+from .event_model import *

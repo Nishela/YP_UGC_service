@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 
-__all__ = ('EventModel',)
+__all__ = (
+    'EventModel',
+)
 
 
 class EventModel(BaseModel):
@@ -9,4 +11,3 @@ class EventModel(BaseModel):
     user_id: str
     event_data: str
     timestamp: str
-    # TODO: возможно, нужно больше полей и информации для аналитики

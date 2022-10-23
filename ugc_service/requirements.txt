@@ -3,3 +3,5 @@ fastapi==0.85.1
 orjson==3.8.0
 python-dotenv==0.21.0
 clickhouse_driver==0.2.4
+gunicorn==20.1.0
+uvicorn==0.17.6
