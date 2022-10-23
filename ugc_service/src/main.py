@@ -8,9 +8,9 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from core import KAFKA_PRODUCER_CONFIG
-from ugc_service.src.api.v1 import events
-from ugc_service.src.core.logger import LOGGING
-from ugc_service.src.kafka_ugc import producer
+from api.v1 import events
+from core.logger import LOGGING
+from kafka_ugc import producer
 
 app = FastAPI(
     title='...',
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         'main:app',
         host='0.0.0.0',
         reload=True,
-        port=8001,
+        port=8000,
         log_config=LOGGING,
         log_level=logging.DEBUG,
     )

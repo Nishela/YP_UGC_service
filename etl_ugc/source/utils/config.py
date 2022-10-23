@@ -1,12 +1,10 @@
 import os
-from logging import config as logging_config
 from typing import Callable
 
 import backoff
 from dotenv import load_dotenv
 from pydantic import BaseSettings, Field
 
-from .logger import LOGGING
 
 __all__ = (
     'KAFKA_CONSUMER_CONFIG',
@@ -16,8 +14,6 @@ __all__ = (
 )
 
 load_dotenv()
-# Применяем настройки логирования
-logging_config.dictConfig(LOGGING)
 # Корень проекта
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

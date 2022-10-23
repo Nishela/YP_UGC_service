@@ -94,3 +94,16 @@ services:
     env_file:
       - .env
     restart: always
+
+  ugc-service:
+    build:
+      context: ./ugc_service
+      dockerfile: Dockerfile
+    container_name: ugc-service
+    depends_on:
+      - kafka
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: always

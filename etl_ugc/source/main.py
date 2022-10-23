@@ -1,10 +1,11 @@
 import logging
+from logging import config
 
 from clickhouse_driver.errors import Error
 from kafka import KafkaConsumer
 from kafka.errors import KafkaError
 
-from utils import CH_CONFIG, APP_CONFIG
+from utils import CH_CONFIG, APP_CONFIG, LOGGING
 from utils import KAFKA_CONSUMER_CONFIG as KAFKA_CONF
 from workers import ETLClickhouse
 from workers import ETLKafkaConsumer
@@ -27,7 +28,6 @@ def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int
                     ch_driver.insert(batcher(batches))
                     batches.clear()
                     batch_count = 0
-
         except KafkaError as _err:
             logging.exception(f"Kafka error: {_err}")
 
@@ -49,4 +49,5 @@ def main():
 
 
 if __name__ == "__main__":
+    config.dictConfig(LOGGING)
     main()

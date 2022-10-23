@@ -18,4 +18,4 @@ CREATE TABLE IF NOT EXISTS %s.%s ON CLUSTER company_cluster
    Engine=MergeTree()
 ORDER BY timestamp"""
 
-INSERT_VALUES = f"INSERT INTO %s.%s VALUES"
+INSERT_VALUES = f"INSERT INTO %s.%s VALUES (%s)"

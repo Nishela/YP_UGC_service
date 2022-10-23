@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from ugc_service.src.kafka_ugc.producer import get_producer
+from kafka_ugc.producer import get_producer
 
 
 @dataclass

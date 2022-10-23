@@ -1,7 +1,7 @@
 from typing import Dict
 
-from src.models.model_meta import ModelMeta
-from src.models.models_mixin import ProducerMixin
+from .model_meta import ModelMeta
+from .models_mixin import ProducerMixin
 
 __all__ = (
     'EventModel',

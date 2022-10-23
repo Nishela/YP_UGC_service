@@ -3,7 +3,7 @@ from collections import defaultdict
 
 from kafka.consumer.fetcher import ConsumerRecord
 
-from source.models import EventModel
+from models import EventModel
 
 __all__ = (
     'transform',
@@ -23,10 +23,11 @@ def transform(data: ConsumerRecord) -> tuple:
         consumer_data = {'event_name': transform_data.get('topic'),
                          'movie_id': movie_id,
                          'user_id': user_id,
-                         'event_data': transform_data.get('value'),
+                         'event_data': transform_data.get('value').decode('utf-8'),
                          'timestamp': transform_data.get('timestamp')}
 
         payload = EventModel(**consumer_data).dict()
+
         return payload['event_name'], payload
 
     except Exception as transform_ex:
