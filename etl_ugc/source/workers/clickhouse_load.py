@@ -1,11 +1,10 @@
 import logging
-from typing import List
 
 import backoff
 from clickhouse_driver import Client
 
-from source.utils import BACKOFF_CONFIG
 from .click_queries import CREATE_DB, CREATE_TABLE, INSERT_VALUES
+from utils.config import BACKOFF_CONFIG
 
 __all__ = (
     'ETLClickhouse',
@@ -13,13 +12,13 @@ __all__ = (
 
 
 class ETLClickhouse:
-    def __init__(self, host: str, db_name: str, tables: List[str, ...]):
+    def __init__(self, host: str, db_name: str, tables: list):
         self.host = host
         self.db_name = db_name
         self.tables = tables
         self.client = self.get_client()
 
-    @backoff.on_exception(BACKOFF_CONFIG)
+    @backoff.on_exception(**BACKOFF_CONFIG)
     def get_client(self):
         return Client(host=self.host)
 

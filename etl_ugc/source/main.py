@@ -4,11 +4,11 @@ from clickhouse_driver.errors import Error
 from kafka import KafkaConsumer
 from kafka.errors import KafkaError
 
-from source.utils import CH_CONFIG, APP_CONFIG
-from source.utils import KAFKA_CONSUMER_CONFIG as KAFKA_CONF
-from source.workers import ETLClickhouse
-from source.workers import ETLKafkaConsumer
-from source.workers import batcher, transform
+from utils import CH_CONFIG, APP_CONFIG
+from utils import KAFKA_CONSUMER_CONFIG as KAFKA_CONF
+from workers import ETLClickhouse
+from workers import ETLKafkaConsumer
+from workers import batcher, transform
 
 
 def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int = 10):

@@ -1,7 +1,7 @@
 import backoff
 from kafka import KafkaConsumer
 
-from source.utils import BACKOFF_CONFIG
+from utils.config import BACKOFF_CONFIG
 
 __all__ = (
     'ETLKafkaConsumer',
