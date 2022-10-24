@@ -4,10 +4,10 @@ __all__ = (
     'INSERT_VALUES',
 )
 
-CREATE_DB = "CREATE DATABASE IF NOT EXISTS %s ON CLUSTER company_cluster"
+CREATE_DB = "CREATE DATABASE IF NOT EXISTS {0} ON CLUSTER company_cluster"
 
 CREATE_TABLE = """
-CREATE TABLE IF NOT EXISTS %s.%s ON CLUSTER company_cluster
+CREATE TABLE IF NOT EXISTS {0}.{1} ON CLUSTER company_cluster
    (
        event_name String,
        movie_id String,
@@ -18,4 +18,4 @@ CREATE TABLE IF NOT EXISTS %s.%s ON CLUSTER company_cluster
    Engine=MergeTree()
 ORDER BY timestamp"""
 
-INSERT_VALUES = f"INSERT INTO %s.%s VALUES (%s)"
+INSERT_VALUES = "INSERT INTO {0}.{1} VALUES"

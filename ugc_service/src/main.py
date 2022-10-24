@@ -7,16 +7,18 @@ from aiokafka import AIOKafkaProducer
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from core import KAFKA_PRODUCER_CONFIG
 from api.v1 import events
-from core.logger import LOGGING
+from core import get_settings
 from kafka_ugc import producer
 
+settings = get_settings()
+
 app = FastAPI(
-    title='...',
+    title=settings.app.project_name,
     docs_url='/ugc_service/openapi',
     openapi_url='/ugc_service/openapi.json',
     default_response_class=ORJSONResponse,
+
 )
 
 loop = asyncio.get_event_loop()
@@ -25,7 +27,7 @@ loop = asyncio.get_event_loop()
 @app.on_event('startup')
 async def startup():
     producer.producer = AIOKafkaProducer(
-        bootstrap_servers=KAFKA_PRODUCER_CONFIG.KAFKA_BOOTSTRAP_SERVERS,
+        bootstrap_servers=settings.kafka_settings.host,
         loop=loop,
         key_serializer=lambda x: x.encode('utf-8'),
         value_serializer=lambda x: json.dumps(x).encode('utf-8'),
@@ -48,6 +50,6 @@ if __name__ == '__main__':
         host='0.0.0.0',
         reload=True,
         port=8000,
-        log_config=LOGGING,
+        log_config=settings.app.logging,
         log_level=logging.DEBUG,
     )

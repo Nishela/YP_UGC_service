@@ -9,11 +9,11 @@ ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt .
 
-RUN pip install --upgrade pip --no-cache-dir\
-    && pip install -r requirements.txt --no-cache-dir
-
 COPY . .
 
 RUN apt update && apt install -y netcat && chmod +x entrypoin.sh
+
+RUN pip install --upgrade pip --no-cache-dir\
+    && pip install -r requirements.txt --no-cache-dir
 
 ENTRYPOINT ./entrypoin.sh && python -u source/main.py
