@@ -3,7 +3,7 @@ from collections import defaultdict
 
 from kafka.consumer.fetcher import ConsumerRecord
 
-from models import EventModel
+from etl_models import EventModel
 
 __all__ = (
     'transform',

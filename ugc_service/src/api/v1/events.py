@@ -1,19 +1,23 @@
 from http import HTTPStatus
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from aiokafka import AIOKafkaProducer
+from fastapi import APIRouter, HTTPException, Depends
 
-from api.v1.schemas import EventSchema
 from core import AVAILABLE_TOPICS
+from kafka_ugc.producer import get_producer
 from models import EventModel
 
 router = APIRouter()
 
 
 @router.post('/send_event', response_model=HTTPStatus)
-async def send_event(event: EventSchema) -> Any:
+async def send_event(event: EventModel, producer: AIOKafkaProducer = Depends(get_producer)) -> Any:
     if not (topic := AVAILABLE_TOPICS.get(event.event_name)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
-    event_instance = EventModel(**event.dict())
-    await event_instance.producer.async_post_event(event_instance, topic)
+    await producer.send_and_wait(
+        topic=topic,
+        key='+'.join((event.user_id, event.data.movie_id)),
+        value=event.data.value,
+    )
     return HTTPStatus.CREATED
