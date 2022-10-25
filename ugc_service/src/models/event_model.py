@@ -1,15 +1,16 @@
-from typing import Dict
-
-from .model_meta import ModelMeta
-from .models_mixin import ProducerMixin
+from pydantic import BaseModel
 
 __all__ = (
     'EventModel',
 )
 
 
-class EventModel(ProducerMixin, metaclass=ModelMeta):
-    def __init__(self, event_name: str, user_id: str, data: Dict[str, str]):
-        self.event_name = event_name
-        self.user_id = user_id
-        self.data = data
+class EventDataModel(BaseModel):
+    movie_id: str
+    value: str
+
+
+class EventModel(BaseModel):
+    event_name: str
+    user_id: str
+    data: EventDataModel
