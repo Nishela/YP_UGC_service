@@ -4,16 +4,17 @@ from typing import Any
 from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, HTTPException, Depends
 
-from core import AVAILABLE_TOPICS
+from core import get_settings
+from kafka_ugc.producer import get_producer
 from models import EventModel
 
-settings = get_settings()
 router = APIRouter()
+settings = get_settings()
 
 
 @router.post('/send_event', response_model=HTTPStatus)
 async def send_event(event: EventModel, producer: AIOKafkaProducer = Depends(get_producer)) -> Any:
-    if not (topic := AVAILABLE_TOPICS.get(event.event_name)):
+    if not (topic := settings.topics.get(event.event_name)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
     await producer.send_and_wait(
         topic=topic,
