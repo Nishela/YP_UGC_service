@@ -1,0 +1,60 @@
+CLICKHOUSE
+
+Total inserting time: 208.749 сек
+
+Running benchmarks for CH without load:
+==============================
+> unique_user_exact <
+
+total time: 0.881
+average time: 0.088
+==============================
+> unique_movies_exact <
+
+total time: 0.809
+average time: 0.081
+==============================
+> unique_movies_count <
+
+total time: 0.634
+average time: 0.063
+==============================
+> unique_users_count <
+
+total time: 0.585
+average time: 0.059
+==============================
+> user_stat <
+
+total time: 1.321
+average time: 0.132
+==============================
+
+---------------------------------------------
+
+Running benchmarks for CH under load:
+> unique_user_exact <
+
+total time: 1.065
+average time: 0.106
+==============================
+> unique_movies_exact <
+
+total time: 0.957
+average time: 0.096
+==============================
+> unique_movies_count <
+
+total time: 1.112
+average time: 0.111
+==============================
+> unique_users_count <
+
+total time: 1.206
+average time: 0.121
+==============================
+> user_stat <
+
+total time: 3.026
+average time: 0.303
+==============================

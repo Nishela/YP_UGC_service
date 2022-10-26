@@ -1,0 +1,60 @@
+VERTICA
+
+Total inserting time: 464.286 сек
+
+Vertica under load:
+==============================
+> unique_user_exact <
+
+total time: 1.641
+average time: 0.164
+
+> unique_movies_exact <
+
+total time: 1.552
+average time: 0.155
+==============================
+> unique_movies_count<
+
+total time: 1.601
+average time: 0.160
+==============================
+> unique_users_count <
+
+total time: 1.746
+average time: 0.175
+==============================
+> user_stat <
+
+total time: 7.405
+average time: 0.741
+==============================
+
+---------------------------------------------
+Vertica without load:
+
+> unique_user_exact <
+
+total time: 2.437
+average time: 0.244
+==============================
+> unique_movies_exact <
+
+total time: 2.404
+average time: 0.240
+==============================
+> unique_movies_count <
+
+total time: 2.382
+average time: 0.238
+==============================
+> unique_users_count <
+
+total time: 2.431
+average time: 0.243
+==============================
+> user_stat <
+
+total time: 11.347
+average time: 1.135
+==============================
