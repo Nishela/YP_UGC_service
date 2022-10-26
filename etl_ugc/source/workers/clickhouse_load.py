@@ -3,12 +3,14 @@ import logging
 import backoff
 from clickhouse_driver import Client
 
-from .click_queries import CREATE_DB, CREATE_TABLE
-from utils import BACKOFF_CONFIG
+from utils import get_settings
+from .click_queries import CREATE_DB, CREATE_TABLE, INSERT_VALUES
 
 __all__ = (
     'ETLClickhouse',
 )
+
+settings = get_settings()
 
 
 class ETLClickhouse:
@@ -18,21 +20,20 @@ class ETLClickhouse:
         self.tables = tables
         self.client = self.get_client()
 
-    @backoff.on_exception(**BACKOFF_CONFIG)
+    @backoff.on_exception(**settings.backoff_settings)
     def get_client(self):
         return Client(host=self.host)
 
     def init_database(self):
-        self.client.execute(CREATE_DB % self.db_name)
+        self.client.execute(CREATE_DB.format(self.db_name))
 
         for table in self.tables:
-            self.client.execute(CREATE_TABLE % (self.db_name, table))
+            self.client.execute(CREATE_TABLE.format(self.db_name, table))
 
     def insert(self, data: dict):
         for event_name, payload in data.items():
             try:
-                self.client.execute(f"""
-                INSERT INTO {self.db_name}.{event_name} VALUES """,
+                self.client.execute(INSERT_VALUES.format(self.db_name, event_name),
                                     payload,
                                     types_check=True)
                 logging.info(f'Success insert {len(payload)} entries in Clickhouse table {self.db_name}.{event_name}')

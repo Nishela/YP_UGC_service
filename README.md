@@ -47,7 +47,7 @@ make run
 ```shell
 make run_m1
 ```
-- удалить все конефнеры
+- удалить все контейнеры
 ```shell
 make delete
 ```

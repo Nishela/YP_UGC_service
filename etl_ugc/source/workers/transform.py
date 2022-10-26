@@ -36,6 +36,6 @@ def transform(data: ConsumerRecord) -> tuple:
 
 def batcher(data: list[tuple, ...]) -> dict:
     batches = defaultdict(list)
-    for tuple_item in data:
-        batches[tuple_item[0]].append(tuple_item[1])
+    for event_name, event in data:
+        batches[event_name].append(event)
     return batches

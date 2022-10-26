@@ -13,7 +13,7 @@ run_m1:
 delete:
 	docker-compose down -v $(c)
 
-elt_logs:
+etl_logs:
 	docker-compose logs etl-ugc --tail=100
 
 ugc_logs:

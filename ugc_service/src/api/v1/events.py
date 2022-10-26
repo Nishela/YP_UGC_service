@@ -5,9 +5,9 @@ from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, HTTPException, Depends
 
 from core import AVAILABLE_TOPICS
-from kafka_ugc.producer import get_producer
 from models import EventModel
 
+settings = get_settings()
 router = APIRouter()
 
 
