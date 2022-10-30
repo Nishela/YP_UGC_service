@@ -12,7 +12,7 @@ settings = get_settings()
 def benchmark_queries(query: str, iteration=1, verbose=False):
     """ Замер времени на различные запросы """
     operation_time = []
-    for i in range(1, iteration+1):
+    for i in range(1, iteration + 1):
         start_time = time.perf_counter()
         vert.get_data(query)
         cur_time = time.perf_counter() - start_time
@@ -44,7 +44,7 @@ def run(requests: dict, iteration: int, verbose=False):
     for name, query in requests.items():
         print(f"start: {name}")
         benchmark_queries(query, iteration, verbose)
-        print("==="*10)
+        print("===" * 10)
 
 
 def benchmark_select():
