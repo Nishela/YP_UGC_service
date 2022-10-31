@@ -87,7 +87,7 @@ services:
     build:
       context: ./ugc_service
       dockerfile: Dockerfile
-    container_name: ugc-service
+    container_name: ugc-services
     depends_on:
       - kafka
     ports:
