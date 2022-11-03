@@ -44,7 +44,7 @@ docker exec -it router-01 bash -c 'echo "db.createCollection(\"movies.bookmarks\
 sleep 3
 echo "\n"
 
-echo "9. Настройка шардирования по полю"
+echo "9. Настройка шардирования"
 docker exec -it router-01 bash -c 'echo "sh.shardCollection(\"movies.votes\", {\"movie_id\": \"hashed\"})" | mongosh'
 docker exec -it router-01 bash -c 'echo "sh.shardCollection(\"movies.reviews\", {\"movie_id\": \"hashed\"})" | mongosh'
 docker exec -it router-01 bash -c 'echo "sh.shardCollection(\"movies.bookmarks\", {\"user_id\": \"hashed\"})" | mongosh'
