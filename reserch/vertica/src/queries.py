@@ -15,9 +15,9 @@ INSERT INTO events (event_name, user_id, movie_id, event_data, timestamp) VALUES
 """
 
 SELECT_QUERIES = {
-    "unique_user_exact": f"select distinct user_id from events",
-    "unique_movies_exact": f"select distinct movie_id from events",
-    "unique_movies_count": f"select count(distinct movie_id) from events",
-    "unique_users_count": f"select count(distinct user_id) from events",
-    "user_stat": f"SELECT user_id, sum(event_data), max(event_data) FROM events GROUP by user_id"
+    "unique_user_exact": "select distinct user_id from events",
+    "unique_movies_exact": "select distinct movie_id from events",
+    "unique_movies_count": "select count(distinct movie_id) from events",
+    "unique_users_count": "select count(distinct user_id) from events",
+    "user_stat": "SELECT user_id, sum(event_data), max(event_data) FROM events GROUP by user_id"
 }
