@@ -42,9 +42,7 @@ class FilmService:
             avg = 0.0
         return FilmInfo(movie_id=film_id, likes=like, dislikes=dislike, rating=avg)
 
-    async def upsert_film_vote(
-            self, film_id: str, user_id: str, rating: int
-    ) -> FilmVote or None:
+    async def upsert_film_vote(self, film_id: str, user_id: str, rating: int) -> FilmVote or None:
         """Update or insert user vote over film by id with rating."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         upserted = {"user_id": user_id, "movie_id": film_id, "rating": rating}
@@ -68,9 +66,7 @@ class FilmService:
         if removed_vote:
             return FilmVote.parse_obj(removed_vote)
 
-    async def get_film_review_info(
-            self, film_id: str, user_id: str
-    ) -> FilmReviewInfo or None:
+    async def get_film_review_info(self, film_id: str, user_id: str) -> FilmReviewInfo or None:
         """Get information about film review: text, timestamp, rating."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         review = await self.reviews_collection.find_one(filtered)
@@ -89,7 +85,11 @@ class FilmService:
         )
 
     async def upsert_film_review(
-            self, film_id: str, user_id: str, text: str, timestamp: datetime.datetime
+            self,
+            film_id: str,
+            user_id: str,
+            text: str,
+            timestamp: datetime.datetime
     ) -> FilmReview:
         """Update or insert film review with text and timestamp."""
         filtered = {"user_id": user_id, "movie_id": film_id}

@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms200m -Xmx200m
+    ports:
+      - "9200:9200"
+    networks:
+      - etlnetwork
+
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash-oss:7.16.2
+    restart: always
+    volumes:
+      - ./pipeline:/usr/share/logstash/pipeline
+#      - /opt/project/logs/nginx/:/var/log/nginx/:ro
+    depends_on:
+      - elasticsearch
+    ports:
+      - "13337:13337"
+      - "13338:13338"
+      - "13339:13339"
+      - "13340:13340"
+    networks:
+      - etlnetwork
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.16.2
+    restart: always
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - etlnetwork
+
+networks:
+  etlnetwork:
+    driver: bridge

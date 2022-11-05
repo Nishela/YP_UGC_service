@@ -26,25 +26,29 @@ loop = asyncio.get_event_loop()
 
 @app.on_event('startup')
 async def startup():
-    producer.producer = AIOKafkaProducer(
-        bootstrap_servers=settings.kafka_settings.host,
-        loop=loop,
-        key_serializer=lambda x: x.encode('utf-8'),
-        value_serializer=lambda x: json.dumps(x).encode('utf-8'),
-        compression_type="gzip"
-    )
-    await producer.producer.start()
+    try:
+        producer.producer = AIOKafkaProducer(
+            bootstrap_servers=settings.kafka_settings.host,
+            loop=loop,
+            key_serializer=lambda x: x.encode('utf-8'),
+            value_serializer=lambda x: json.dumps(x).encode('utf-8'),
+            compression_type="gzip"
+        )
+        await producer.producer.start()
+        logging.info(f'producer successfully started')
+    except (ConnectionError, Exception) as e:
+        logging.exception(f'producer start failed with\n{e}')
 
 
 @app.on_event('shutdown')
 async def shutdown():
     await producer.producer.stop()
+    logging.debug('producer successfully stopped')
 
 
 app.include_router(events.router, prefix='/ugc_service/v1/producer', tags=['producer'])
 
 if __name__ == '__main__':
-    # only for develop (production use nginx + gunicorn server)
     uvicorn.run(
         'main:app',
         host='0.0.0.0',

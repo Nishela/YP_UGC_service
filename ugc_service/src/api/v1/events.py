@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 from typing import Any
 
@@ -15,6 +16,7 @@ settings = get_settings()
 @router.post('/send_event', response_model=HTTPStatus)
 async def send_event(event: EventModel, producer: AIOKafkaProducer = Depends(get_producer)) -> Any:
     if not (topic := settings.topics.get(event.event_name)):
+        logging.error(f'{event.event_name} not found')
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
     await producer.send_and_wait(
         topic=topic,
