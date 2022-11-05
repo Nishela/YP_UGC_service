@@ -44,7 +44,9 @@ def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int
             logging.exception(f"ClickHouse error: {_err}")
 
 
-def main():
+if __name__ == "__main__":
+    config.dictConfig(LOGGING)
+
     ch_driver = ETLClickhouse(db_name=settings.ch_settings.db,
                               host=settings.ch_settings.host,
                               tables=settings.ch_settings.tables)
@@ -55,8 +57,3 @@ def main():
     ch_driver.init_database()
 
     etl(consumer, ch_driver, batch_size=settings.app.batch_size)
-
-
-if __name__ == "__main__":
-    config.dictConfig(LOGGING)
-    main()

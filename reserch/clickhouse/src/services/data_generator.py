@@ -1,7 +1,7 @@
 import datetime
 import random
 import uuid
-from typing import Iterator
+from typing import Iterator, Union
 
 from reserch.config import get_settings
 
@@ -20,7 +20,7 @@ class DataGenerator:
     def __init__(self, topic):
         self.topic = topic
 
-    def generate_row(self) -> dict:
+    def generate_row(self) -> dict[str, Union[str, uuid.UUID, datetime.datetime, int]]:
         return {
             'id': random.choice(self.FAKE_IDS),
             'event_name': self.topic,
