@@ -11,7 +11,7 @@ settings = get_settings()
 
 
 class ETLKafkaConsumer:
-    def __init__(self, host: list[str, ...], topics: list[str, ...], group_id: str):
+    def __init__(self, host: list[str], topics: list[str], group_id: str):
         self.host = host
         self.topics = topics
         self.group_id = group_id

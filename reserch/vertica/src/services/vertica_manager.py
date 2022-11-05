@@ -35,8 +35,8 @@ class VerticaManager:
                 total_time.append(res_time)
                 print(f"Insert batch time: {res_time:.3f}")
 
-        total_time = sum(total_time)
-        print(f"Total insert operation time: {total_time:.3f}")
+        sum_time = sum(total_time)
+        print(f"Total insert operation time: {sum_time:.3f}")
 
     def get_data(self, query):
         with self._cursor() as cursor:

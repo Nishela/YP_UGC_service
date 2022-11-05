@@ -28,8 +28,8 @@ class ClickhouseManager:
             total_time.append(res_time)
             print(f"Insert batch: {res_time:.3f}")
 
-        total_time = sum(total_time)
-        print(f"Total insert operation time: {total_time:.3f}")
+        sum_time = sum(total_time)
+        print(f"Total insert operation time: {sum_time:.3f}")
 
     def insert(self, data: dict):
         self.client.execute(INSERT_QUERY, data,
