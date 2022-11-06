@@ -10,14 +10,14 @@ from reserch.clickhouse.src.queries import INSERT_QUERY
 
 
 class ClickhouseManager:
-    def __init__(self, host: str):
+    def __init__(self, host: str) -> None:
         self.host = host
         self.client: Client = self.get_client()
 
     def get_client(self) -> Client:
         return Client(host=self.host)
 
-    def fill_db(self, data):
+    def fill_db(self, data) -> None:
         total_time = []
         for payload in data:
             start_time = time.perf_counter()
@@ -29,9 +29,9 @@ class ClickhouseManager:
         sum_time = sum(total_time)
         print(f"Total insert operation time: {sum_time:.3f}")
 
-    def insert(self, data: dict[str, str]):
+    def insert(self, data: dict[str, str]) -> None:
         self.client.execute(INSERT_QUERY, data,
                             types_check=True)
 
-    def get_data(self, query):
+    def get_data(self, query) -> None:
         self.client.execute(query)

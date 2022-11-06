@@ -40,7 +40,7 @@ def benchmark_insert() -> None:
     vert.fill_db(fake_data)
 
 
-def run(requests: Dict, iteration: int, verbose=False) -> None:
+def run(requests: Dict[str, str], iteration: int, verbose=False) -> None:
     print("Running benchmarks for Vertica:")
     for name, query in requests.items():
         print(f"start: {name}")

@@ -17,7 +17,7 @@ class DataGenerator:
     FAKE_MOVIE_IDS = [uuid.uuid4() for _ in range(settings.app.unique_ids)]
     FAKE_IDS = [uuid.uuid4() for _ in range(settings.app.unique_ids)]
 
-    def __init__(self, topic):
+    def __init__(self, topic) -> None:
         self.topic = topic
 
     def generate_row(self) -> Dict[str, Union[str, uuid.UUID, datetime.datetime, int]]:
@@ -33,5 +33,5 @@ class DataGenerator:
     def generate_batch(self, size: int) -> List[Dict[str, Union[str, uuid.UUID, datetime.datetime, int]]]:
         return [self.generate_row() for _ in range(size)]
 
-    def fake_data_generator(self, batch_size: int, quantity: int) -> Iterator:
+    def fake_data_generator(self, batch_size: int, quantity: int):
         return (self.generate_batch(batch_size) for _ in range(quantity))
