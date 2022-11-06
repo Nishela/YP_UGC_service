@@ -43,7 +43,7 @@ jobs:
 
       - name: Check with Mypy
         run: |
-          mypy . --ignore-missing-imports
+          mypy . --ignore-missing-imports --disallow-untyped-decorators
 
       - name: Send telegram message on pull-request (fail)
         if: ${{ failure() }}

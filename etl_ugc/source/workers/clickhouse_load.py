@@ -41,3 +41,4 @@ class ETLClickhouse:
                 return True
             except KeyError as _err:
                 logging.exception(f"Error inserting data to Clickhouse table {self.db_name}.{event_name}: {_err}")
+                return None
