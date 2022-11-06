@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Optional
 
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -15,7 +16,7 @@ class UserService:
         self.database = self.mongo.movies
         self.collection = self.database.get_collection("bookmarks")
 
-    async def get_user_bookmarks(self, user_id: str) -> Bookmarks or None:
+    async def get_user_bookmarks(self, user_id: str) -> Optional[Bookmarks]:
         """Get user bookmarks by user_id"""
         films = await self.collection.find_one({"user_id": user_id})
         if not films:
@@ -36,9 +37,7 @@ class UserService:
         await self.collection.insert_one({"user_id": user_id, "movie_id": film_id})
         return Bookmark(user_id=user_id, movie_id=film_id)
 
-    async def remove_user_bookmark(
-            self, user_id: str, film_id: str
-    ) -> Bookmark or None:
+    async def remove_user_bookmark(self, user_id: str, film_id: str) -> Optional[Bookmarks]:
         """Find and delete user bookmark by user_id and film_id."""
         bookmark = await self.collection.find_one_and_delete(
             {"$and": [{"movie_id": film_id}, {"user_id": user_id}]},
