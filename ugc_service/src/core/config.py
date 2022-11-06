@@ -38,6 +38,6 @@ class Settings(BaseSettings):
     kafka_settings = KafkaSettings()
 
 
-@lru_cache
+@lru_cache(maxsize=128)
 def get_settings() -> Settings:
     return Settings()

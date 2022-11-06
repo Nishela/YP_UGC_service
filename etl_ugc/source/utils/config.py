@@ -44,6 +44,6 @@ class Settings(BaseSettings):
     backoff_settings = BackoffSettings().dict()
 
 
-@lru_cache
+@lru_cache(maxsize=128)
 def get_settings() -> Settings:
     return Settings()

@@ -1,4 +1,5 @@
 import time
+from typing import Dict
 
 from clickhouse_driver import Client
 
@@ -29,7 +30,7 @@ class ClickhouseManager:
         sum_time = sum(total_time)
         print(f"Total insert operation time: {sum_time:.3f}")
 
-    def insert(self, data: dict[str, str]) -> None:
+    def insert(self, data: Dict[str, str]) -> None:
         self.client.execute(INSERT_QUERY, data,
                             types_check=True)
 
