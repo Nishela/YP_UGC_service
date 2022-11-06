@@ -36,6 +36,6 @@ class Settings(BaseSettings):
     mongo = MongoSettings()
 
 
-@lru_cache
+@lru_cache(maxsize=128)
 def get_settings() -> Settings:
     return Settings()

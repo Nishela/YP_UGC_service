@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional
+from typing import Optional, List
 
 import orjson
 from pydantic import BaseModel, Field
@@ -35,7 +35,7 @@ class FilmInfo(Orjson):
 
 class Bookmarks(Orjson):
     user_id: str
-    movie_ids: list[str] = []
+    movie_ids: List[str] = []
 
 
 class Bookmark(Orjson):
