@@ -125,6 +125,8 @@ class FilmService:
         if removed_review:
             return FilmReview.parse_obj(removed_review)
 
+        return None
+
 
 @lru_cache()
 def get_film_service(mongo: AsyncIOMotorClient = Depends(get_mongo)) -> FilmService:
