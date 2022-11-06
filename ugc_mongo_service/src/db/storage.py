@@ -56,5 +56,5 @@ class AsyncMongoStorage(Storage):
         return await self.mongo[self.db][self.collection].delete_one(spec)
 
 
-def get_mongo_storage(**kwargs) -> Storage:
+async def get_mongo_storage(**kwargs) -> Storage:
     return await AsyncMongoStorage.create_mongo(**kwargs)
