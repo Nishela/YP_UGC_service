@@ -1,4 +1,5 @@
 import logging
+from typing import Optional, Tuple, Dict, List, DefaultDict
 from collections import defaultdict
 
 from kafka.consumer.fetcher import ConsumerRecord
@@ -11,7 +12,7 @@ __all__ = (
 )
 
 
-def transform(data: ConsumerRecord) -> tuple:
+def transform(data: ConsumerRecord) -> Optional[Tuple[str, Dict[str, str]]]:
     """ Превращаем данные из Kafka в модель EventModel """
     try:
         transform_data = data._asdict()
@@ -29,12 +30,12 @@ def transform(data: ConsumerRecord) -> tuple:
         payload = EventModel(**consumer_data).dict()
 
         return payload['event_name'], payload
-
     except Exception as transform_ex:
         logging.error('Error while transforming data: {0}'.format(transform_ex))
+        return None
 
 
-def batcher(data: list[tuple, ...]) -> dict:
+def batcher(data: List[Tuple[str, Dict[str, str]]]) -> DefaultDict[str, List[Dict[str, str]]]:
     batches = defaultdict(list)
     for event_name, event in data:
         batches[event_name].append(event)

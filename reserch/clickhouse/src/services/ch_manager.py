@@ -1,8 +1,7 @@
 import time
-from typing import Iterator
+from typing import Dict
 
 from clickhouse_driver import Client
-
 
 __all__ = (
     'ClickhouseManager',
@@ -12,14 +11,14 @@ from reserch.clickhouse.src.queries import INSERT_QUERY
 
 
 class ClickhouseManager:
-    def __init__(self, host: str):
+    def __init__(self, host: str) -> None:
         self.host = host
-        self.client = self.get_client()
+        self.client: Client = self.get_client()
 
-    def get_client(self):
+    def get_client(self) -> Client:
         return Client(host=self.host)
 
-    def fill_db(self, data: Iterator):
+    def fill_db(self, data) -> None:
         total_time = []
         for payload in data:
             start_time = time.perf_counter()
@@ -28,12 +27,12 @@ class ClickhouseManager:
             total_time.append(res_time)
             print(f"Insert batch: {res_time:.3f}")
 
-        total_time = sum(total_time)
-        print(f"Total insert operation time: {total_time:.3f}")
+        sum_time = sum(total_time)
+        print(f"Total insert operation time: {sum_time:.3f}")
 
-    def insert(self, data: dict):
+    def insert(self, data: Dict[str, str]) -> None:
         self.client.execute(INSERT_QUERY, data,
                             types_check=True)
 
-    def get_data(self, query):
+    def get_data(self, query) -> None:
         self.client.execute(query)

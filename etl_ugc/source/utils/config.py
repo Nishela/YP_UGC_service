@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from typing import Callable
+from typing import List
 
 import backoff
 from dotenv import load_dotenv
@@ -21,18 +21,18 @@ class AppConfig(BaseSettings):
 
 class KafkaSettings(BaseSettings):
     host: str = Field(..., env='KAFKA_BOOTSTRAP_SERVERS')
-    topics: list = Field(..., env='EVENT_TYPES')
+    topics: List[str] = Field(..., env='EVENT_TYPES')
     group_id: str = Field(..., env='KAFKA_GROUP_ID')
 
 
 class ClickHouseSettings(BaseSettings):
     host: str = Field(..., env='CH_HOST')
     db: str = Field(..., env='CH_DB')
-    tables: list = Field(..., env='EVENT_TYPES')
+    tables: List[str] = Field(..., env='EVENT_TYPES')
 
 
 class BackoffSettings(BaseSettings):
-    wait_gen: Callable = Field(backoff.expo)
+    wait_gen = Field(backoff.expo)
     exception: type = Field(Exception)
     max_tries: int = Field(..., env='BACKOFF_MAX_RETRIES')
 
@@ -44,6 +44,6 @@ class Settings(BaseSettings):
     backoff_settings = BackoffSettings().dict()
 
 
-@lru_cache
+@lru_cache(maxsize=128)
 def get_settings() -> Settings:
     return Settings()

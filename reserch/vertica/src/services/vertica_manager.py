@@ -20,7 +20,7 @@ class VerticaManager:
         finally:
             connection.close()
 
-    def create_table(self):
+    def create_table(self) -> None:
         with self._cursor() as cursor:
             cursor.execute(DROP_TABLE)
             cursor.execute(CREATE_TABLE)
@@ -35,9 +35,9 @@ class VerticaManager:
                 total_time.append(res_time)
                 print(f"Insert batch time: {res_time:.3f}")
 
-        total_time = sum(total_time)
-        print(f"Total insert operation time: {total_time:.3f}")
+        sum_time = sum(total_time)
+        print(f"Total insert operation time: {sum_time:.3f}")
 
-    def get_data(self, query):
+    def get_data(self, query) -> None:
         with self._cursor() as cursor:
             cursor.execute(query)
