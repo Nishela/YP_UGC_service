@@ -22,21 +22,25 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    mongo.mongo = AsyncIOMotorClient(
-        "mongodb://{host}:{port}".format(
-            host=settings.mongo.host,
-            port=settings.mongo.port,
-        )
+    mongo_uri = "mongodb://{host}:{port}".format(
+        host=settings.mongo.host,
+        port=settings.mongo.port,
     )
+    try:
+        mongo.mongo = AsyncIOMotorClient(mongo_uri)
+        logging.info(f'mongodb {mongo_uri} successfully connected')
+    except (ConnectionError, Exception) as e:
+        logging.exception(f'Cannot connect to mongo {mongo_uri}\n {e}')
 
 
 @app.on_event("shutdown")
 async def shutdown():
     await mongo.mongo.close()
+    logging.debug('mongodb successfully closed')
+
 
 app.include_router(movie.router, prefix="/api/v1/movie", tags=["movie"])
 app.include_router(user.router, prefix="/api/v1/user", tags=["user"])
-
 
 if __name__ == "__main__":
     uvicorn.run(
