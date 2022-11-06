@@ -13,7 +13,7 @@ __all__ = (
 
 load_dotenv()
 # Применяем настройки логирования
-logging_config.dictConfig(LOGGING)
+logging_config.fileConfig(LOGGING['log_config'], disable_existing_loggers=True)
 
 
 class AppConfig(BaseSettings):
@@ -25,6 +25,7 @@ class AppConfig(BaseSettings):
 class MongoSettings(BaseSettings):
     host: str = Field(..., env='MONGO_HOST')
     port: int = Field(..., env='MONGO_PORT')
+
 
 class SentrySetting(BaseSettings):
     pass

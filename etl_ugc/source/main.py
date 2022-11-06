@@ -1,5 +1,5 @@
 import logging
-from logging import config
+from logging import config as logging_config
 
 from clickhouse_driver.errors import Error
 from kafka import KafkaConsumer
@@ -16,7 +16,7 @@ settings = get_settings()
 
 def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int = 10):
     ch_driver.init_database()
-    logging.info('>>>>  ELT Process was started...  <<<<')
+    logging.debug('>>>>  ELT Process was started...  <<<<')
 
     while True:
         try:
@@ -45,7 +45,7 @@ def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int
 
 
 if __name__ == "__main__":
-    config.dictConfig(LOGGING)
+    logging_config.fileConfig(LOGGING['log_config'], disable_existing_loggers=True)
 
     ch_driver = ETLClickhouse(db_name=settings.ch_settings.db,
                               host=settings.ch_settings.host,

@@ -13,7 +13,7 @@ __all__ = (
 
 load_dotenv()
 # Применяем настройки логирования
-logging_config.dictConfig(LOGGING)
+logging_config.fileConfig(LOGGING['log_config'], disable_existing_loggers=True)
 
 
 class AppConfig(BaseSettings):

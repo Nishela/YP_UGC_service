@@ -1,5 +1,5 @@
+import logging
 from http import HTTPStatus
-from typing import Any
 
 from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, HTTPException, Depends
@@ -16,6 +16,7 @@ settings = get_settings()
 async def send_event(event: EventModel, producer: AIOKafkaProducer = Depends(get_producer)) -> int:
     topic = settings.topics.get(event.event_name)
     if not topic:
+        logging.error(f'{event.event_name} not found')
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
     await producer.send_and_wait(
         topic=topic,
