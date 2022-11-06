@@ -58,6 +58,8 @@ class FilmService:
         if upserted_vote:
             return FilmVote.parse_obj(upserted_vote)
 
+        return None
+
     async def remove_film_vote(self, film_id: str, user_id: str) -> Optional[FilmVote]:
         """Remove vote from film by user id."""
         payload = {"user_id": user_id, "movie_id": film_id}
@@ -66,6 +68,8 @@ class FilmService:
         )
         if removed_vote:
             return FilmVote.parse_obj(removed_vote)
+
+        return None
 
     async def get_film_review_info(self, film_id: str, user_id: str) -> Optional[FilmReviewInfo]:
         """Get information about film review: text, timestamp, rating."""
@@ -91,7 +95,7 @@ class FilmService:
             user_id: str,
             text: str,
             timestamp: datetime.datetime
-    ) -> FilmReview:
+    ) -> Optional[FilmReview]:
         """Update or insert film review with text and timestamp."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         upserted = {
@@ -109,6 +113,8 @@ class FilmService:
         )
         if upserted_review:
             return FilmReview.parse_obj(upserted_review)
+
+        return None
 
     async def remove_film_review(self, film_id: str, user_id: str) -> Optional[FilmReview]:
         """Find and remove film review by user_id and movie_id."""
