@@ -1,5 +1,4 @@
 import time
-from typing import Iterator, Generator
 
 from clickhouse_driver import Client
 
@@ -18,7 +17,7 @@ class ClickhouseManager:
     def get_client(self) -> Client:
         return Client(host=self.host)
 
-    def fill_db(self, data: Generator):
+    def fill_db(self, data):
         total_time = []
         for payload in data:
             start_time = time.perf_counter()

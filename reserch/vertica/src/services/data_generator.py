@@ -1,7 +1,7 @@
 import datetime
 import random
 import uuid
-from typing import Iterator, Generator
+from typing import List, Tuple
 
 from reserch.config import get_settings
 
@@ -15,7 +15,7 @@ class DataGenerator:
     def __init__(self, topic: str):
         self.topic = topic
 
-    def generate_row(self) -> tuple[str, uuid.UUID, uuid.UUID, int, datetime.datetime]:
+    def generate_row(self) -> Tuple[str, uuid.UUID, uuid.UUID, int, datetime.datetime]:
         return (
             self.topic,
             random.choice(self.FAKE_USER_IDS),
@@ -24,8 +24,8 @@ class DataGenerator:
             datetime.datetime.now()
         )
 
-    def generate_batch(self, size: int) -> list[tuple[str, uuid.UUID, uuid.UUID, int, datetime.datetime]]:
+    def generate_batch(self, size: int) -> List[Tuple[str, uuid.UUID, uuid.UUID, int, datetime.datetime]]:
         return [self.generate_row() for _ in range(size)]
 
-    def fake_data_generator(self, batch_size: int, quantity: int) -> Generator:
+    def fake_data_generator(self, batch_size: int, quantity: int):
         return (self.generate_batch(batch_size) for _ in range(quantity))

@@ -1,4 +1,5 @@
 import time
+from typing import Dict
 
 from reserch.clickhouse.src.queries import SELECT_QUERIES
 from reserch.clickhouse.src.services.ch_manager import ClickhouseManager
@@ -9,7 +10,7 @@ settings = get_settings()
 ch = ClickhouseManager(settings.clickhouse.host)
 
 
-def benchmark_queries(query: str, iteration=1, verbose=False):
+def benchmark_queries(query: str, iteration: int = 1, verbose: bool = False) -> None:
     """ Замер времени на различные запросы """
     operation_time = []
     for i in range(1, iteration + 1):
@@ -26,7 +27,7 @@ def benchmark_queries(query: str, iteration=1, verbose=False):
     print(f"average time: {avg_time:.3f}")
 
 
-def benchmark_insert():
+def benchmark_insert() -> None:
     """
     Поток вставки данныx. Кол-во записей = batch_size * batch_count
     """
@@ -38,7 +39,7 @@ def benchmark_insert():
     ch.fill_db(fake_data)
 
 
-def run(requests: dict, iteration: int, verbose=False):
+def run(requests: Dict[str, str], iteration: int, verbose=False) -> None:
     print("Running benchmarks for CH:")
     for name, query in requests.items():
         print(f"Start: {name}")
@@ -46,5 +47,5 @@ def run(requests: dict, iteration: int, verbose=False):
         print("===" * 10)
 
 
-def benchmark_select():
+def benchmark_select() -> None:
     run(SELECT_QUERIES, 10)

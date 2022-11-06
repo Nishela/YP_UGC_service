@@ -34,6 +34,6 @@ class Settings(BaseSettings):
     clickhouse = ClickhouseConfig()
 
 
-@lru_cache
+@lru_cache  # type: ignore
 def get_settings() -> Settings:
     return Settings()
