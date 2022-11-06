@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 
 from db.mongo import get_mongo
 
-mongo_client = await get_mongo()
-
 
 class Storage(ABC):
     def __call__(self):
@@ -24,7 +22,7 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    async def update(self, spec: dict, document: dict,):
+    async def update(self, spec: dict, document: dict, ):
         pass
 
     @abstractmethod
@@ -33,11 +31,12 @@ class Storage(ABC):
 
 
 class AsyncMongoStorage(Storage):
-    def __init__(self, db: str, collection: str):
+    async def create_mongo(self, db: str, collection: str):
         super().__init__()
-        self.mongo = mongo_client
+        self.mongo = await get_mongo()
         self.db = db
         self.collection = collection
+        return self
 
     async def create(self, document: dict) -> dict:
         return await self.mongo[self.db][self.collection].insert_one(document)
@@ -58,4 +57,4 @@ class AsyncMongoStorage(Storage):
 
 
 def get_mongo_storage(**kwargs) -> Storage:
-    return AsyncMongoStorage(**kwargs)
+    return await AsyncMongoStorage.create_mongo(**kwargs)
