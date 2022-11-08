@@ -10,6 +10,9 @@ run:
 run_m1:
 	docker-compose -f docker-compose_m1.yml up -d --build
 
+run_and_config_mongo:
+	docker-compose -f docker-compose-mongo.yml up -d --build && chmod +x ./mongo_setup.sh && sh ./mongo_setup.sh
+
 delete:
 	docker-compose down -v $(c)
 
