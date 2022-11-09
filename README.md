@@ -80,4 +80,4 @@ make run_and_config_mongo
 
 ---
 ### Схема TO BE: 
-![img.png](schema.png)
+![img.png](schema_new.jpg)
