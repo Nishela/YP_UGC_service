@@ -3,7 +3,6 @@ import logging
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-from fastapi.security import HTTPBearer
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from api.v1 import user, movie
@@ -11,7 +10,7 @@ from core import get_settings
 from db import mongo
 
 settings = get_settings()
-security = HTTPBearer()
+
 
 app = FastAPI(
     title=settings.app.project_name,

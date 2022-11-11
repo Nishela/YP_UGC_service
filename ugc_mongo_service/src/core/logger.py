@@ -4,5 +4,5 @@ __all__ = (
 
 LOGGING = {
     'version': 1,
-    'log_config': 'src/core/logging.conf',
+    'log_config': './core/logging.conf',
 }

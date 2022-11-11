@@ -4,6 +4,7 @@ from collections import namedtuple
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBearer
 
 from models.models import (
     FilmInfo,
@@ -14,10 +15,10 @@ from models.models import (
     FilmVoteFilter,
 )
 from services.movie import FilmService, get_film_service
-from ugc_mongo_service.src.main import security
-from ugc_mongo_service.src.utils.token_decoder import get_token_payload
+from utils.token_decoder import get_token_payload
 
 router = APIRouter()
+security = HTTPBearer()
 
 
 @router.get("/{film_id}/likes", response_model=FilmInfo, response_model_exclude_unset=True)
@@ -38,10 +39,14 @@ async def upsert_film_vote(
         film_service: FilmService = Depends(get_film_service),
         access_token: namedtuple = Depends(security),
 ) -> FilmVote:
+
     token_payload = get_token_payload(access_token.credentials)
+    if not (user_id := token_payload.get('user_id')):
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+
     result = await film_service.upsert_film_vote(
         film_id=film_vote.movie_id,
-        user_id=token_payload.get('user_id'),
+        user_id=user_id,
         rating=film_vote.rating
     )
     if not result:
@@ -61,12 +66,16 @@ async def remove_film_vote(
         access_token: namedtuple = Depends(security),
 ) -> FilmVote:
     token_payload = get_token_payload(access_token.credentials)
-    result = await film_service.remove_film_vote(film_id=film_vote.movie_id, user_id=token_payload.get('user_id'))
+
+    if not (user_id := token_payload.get('user_id')):
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+
+    result = await film_service.remove_film_vote(film_id=film_vote.movie_id, user_id=user_id)
     if not result:
         logging.error(
             f'failed to delete movie_id %s, user_id %s',
             film_vote.movie_id,
-            token_payload.get('user_id')
+            user_id
         )
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result
@@ -79,10 +88,14 @@ async def get_film_review_info(
         access_token: namedtuple = Depends(security),
 ) -> FilmReview:
     token_payload = get_token_payload(access_token.credentials)
-    result = await film_service.get_film_review_info(film_id=film_review.movie_id, user_id=token_payload.get('user_id'))
+
+    if not (user_id := token_payload.get('user_id')):
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+
+    result = await film_service.get_film_review_info(film_id=film_review.movie_id, user_id=user_id)
     if not result:
         logging.error('failed to get review movie_id %s, user_id %s', film_review.movie_id,
-                      token_payload.get('user_id'))
+                      user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result
 
@@ -94,9 +107,13 @@ async def upsert_film_review(
         access_token: namedtuple = Depends(security),
 ) -> FilmReview:
     token_payload = get_token_payload(access_token.credentials)
+
+    if not (user_id := token_payload.get('user_id')):
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+
     result = await film_service.upsert_film_review(
         film_id=film_review.movie_id,
-        user_id=token_payload.get('user_id'),
+        user_id=user_id,
         text=film_review.text,
         timestamp=datetime.datetime.now(),
     )
@@ -104,7 +121,7 @@ async def upsert_film_review(
         logging.error(
             'failed to add review movie_id %s, user_id %s',
             film_review.movie_id,
-            token_payload.get('user_id')
+            user_id
         )
         raise HTTPException(status_code=HTTPStatus.BAD_REQUEST)
     return result
@@ -117,11 +134,15 @@ async def remove_film_review(
         access_token: namedtuple = Depends(security),
 ) -> FilmReview:
     token_payload = get_token_payload(access_token.credentials)
-    result = await film_service.remove_film_review(film_id=film_review.movie_id, user_id=token_payload.get('user_id'))
+
+    if not (user_id := token_payload.get('user_id')):
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+
+    result = await film_service.remove_film_review(film_id=film_review.movie_id, user_id=user_id)
     if not result:
         logging.error(
             'failed to delete review movie_id %s, user_id %s',
-            film_review.movie_id, token_payload.get('user_id')
+            film_review.movie_id, user_id
         )
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result
