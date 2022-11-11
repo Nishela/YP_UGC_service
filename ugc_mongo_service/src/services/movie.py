@@ -1,5 +1,6 @@
 import datetime
 from functools import lru_cache
+from typing import Optional
 
 from fastapi import Depends
 from models.models import FilmInfo, FilmReview, FilmReviewInfo, FilmVote
@@ -18,7 +19,7 @@ class FilmService:
         self.votes_collection = self.database.get_collection("votes")
         self.reviews_collection = self.database.get_collection("reviews")
 
-    async def get_film_info(self, film_id: str) -> FilmInfo or None:
+    async def get_film_info(self, film_id: str) -> Optional[FilmInfo]:
         """Get film info by film id: likes, dislikes count and avg rating."""
         film = await self.votes_collection.find_one({"movie_id": film_id})
         if not film:
@@ -42,7 +43,7 @@ class FilmService:
             avg = 0.0
         return FilmInfo(movie_id=film_id, likes=like, dislikes=dislike, rating=avg)
 
-    async def upsert_film_vote(self, film_id: str, user_id: str, rating: int) -> FilmVote or None:
+    async def upsert_film_vote(self, film_id: str, user_id: str, rating: int) -> Optional[FilmVote]:
         """Update or insert user vote over film by id with rating."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         upserted = {"user_id": user_id, "movie_id": film_id, "rating": rating}
@@ -57,7 +58,9 @@ class FilmService:
         if upserted_vote:
             return FilmVote.parse_obj(upserted_vote)
 
-    async def remove_film_vote(self, film_id: str, user_id: str) -> FilmVote or None:
+        return None
+
+    async def remove_film_vote(self, film_id: str, user_id: str) -> Optional[FilmVote]:
         """Remove vote from film by user id."""
         payload = {"user_id": user_id, "movie_id": film_id}
         removed_vote = await self.votes_collection.find_one_and_delete(
@@ -66,7 +69,9 @@ class FilmService:
         if removed_vote:
             return FilmVote.parse_obj(removed_vote)
 
-    async def get_film_review_info(self, film_id: str, user_id: str) -> FilmReviewInfo or None:
+        return None
+
+    async def get_film_review_info(self, film_id: str, user_id: str) -> Optional[FilmReviewInfo]:
         """Get information about film review: text, timestamp, rating."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         review = await self.reviews_collection.find_one(filtered)
@@ -90,7 +95,7 @@ class FilmService:
             user_id: str,
             text: str,
             timestamp: datetime.datetime
-    ) -> FilmReview:
+    ) -> Optional[FilmReview]:
         """Update or insert film review with text and timestamp."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         upserted = {
@@ -109,9 +114,9 @@ class FilmService:
         if upserted_review:
             return FilmReview.parse_obj(upserted_review)
 
-    async def remove_film_review(
-            self, film_id: str, user_id: str
-    ) -> FilmReview or None:
+        return None
+
+    async def remove_film_review(self, film_id: str, user_id: str) -> Optional[FilmReview]:
         """Find and remove film review by user_id and movie_id."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         removed_review = await self.reviews_collection.find_one_and_delete(
@@ -119,6 +124,8 @@ class FilmService:
         )
         if removed_review:
             return FilmReview.parse_obj(removed_review)
+
+        return None
 
 
 @lru_cache()
