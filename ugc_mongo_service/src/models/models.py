@@ -16,7 +16,6 @@ class Orjson(BaseModel):
 
 
 class FilmVote(Orjson):
-    user_id: str
     movie_id: str
     rating: int
 
@@ -45,7 +44,6 @@ class Bookmark(Orjson):
 
 class FilmReview(Orjson):
     movie_id: str
-    user_id: str
     text: str = Field(max_length=800)
     timestamp: datetime.datetime
 
