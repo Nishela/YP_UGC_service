@@ -38,10 +38,10 @@ def etl(kafka_consumer: KafkaConsumer, ch_driver: ETLClickhouse, batch_size: int
                         kafka_consumer.commit(offset)
 
         except KafkaError as _err:
-            logging.exception(f"Kafka error: {_err}")
+            logging.exception("Kafka error")
 
         except Error as _err:
-            logging.exception(f"ClickHouse error: {_err}")
+            logging.exception("ClickHouse error")
 
 
 if __name__ == "__main__":

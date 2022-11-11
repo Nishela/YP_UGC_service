@@ -28,9 +28,9 @@ async def startup():
     )
     try:
         mongo.mongo = AsyncIOMotorClient(mongo_uri)
-        logging.info(f'mongodb {mongo_uri} successfully connected')
+        logging.info('mongodb %s successfully connected', mongo_uri)
     except (ConnectionError, Exception) as e:
-        logging.exception(f'Cannot connect to mongo {mongo_uri}\n {e}')
+        logging.exception('Cannot connect to mongo %s', mongo_uri)
 
 
 @app.on_event("shutdown")

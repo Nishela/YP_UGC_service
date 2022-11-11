@@ -37,7 +37,7 @@ async def startup():
         await producer.producer.start()
         logging.info(f'producer successfully started')
     except (ConnectionError, Exception) as e:
-        logging.exception(f'producer start failed with\n{e}')
+        logging.exception('producer start failed with')
 
 
 @app.on_event('shutdown')

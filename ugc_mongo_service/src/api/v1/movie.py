@@ -24,7 +24,7 @@ async def film_likes(
 ) -> FilmInfo:
     film_info = await film_service.get_film_info(film_id)
     if not film_info:
-        logging.info(f'Cannot get film info, film_id {film_id} does not exist')
+        logging.info('Cannot get film info, film_id %s does not exist', film_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return film_info
 
@@ -40,7 +40,7 @@ async def upsert_film_vote(
         rating=film_vote.rating
     )
     if not result:
-        logging.error(f'vote not counted movie_id: {film_vote.movie_id}, user_id {film_vote.user_id}')
+        logging.error('vote not counted movie_id: %s, user_id %s', film_vote.movie_id, film_vote.user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result
 
@@ -52,7 +52,7 @@ async def remove_film_vote(
 ) -> FilmVote:
     result = await film_service.remove_film_vote(film_id=film_vote.movie_id, user_id=film_vote.user_id)
     if not result:
-        logging.error(f'failed to delete movie_id {film_vote.movie_id}, user_id {film_vote.user_id}')
+        logging.error(f'failed to delete movie_id %s, user_id %s', film_vote.movie_id, film_vote.user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result
 
@@ -64,7 +64,7 @@ async def get_film_review_info(
 ) -> FilmReview:
     result = await film_service.get_film_review_info(film_id=film_review.movie_id, user_id=film_review.user_id)
     if not result:
-        logging.error(f'failed to get review movie_id {film_review.movie_id}, user_id {film_review.user_id}')
+        logging.error('failed to get review movie_id %s, user_id %s', film_review.movie_id, film_review.user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result
 
@@ -81,7 +81,7 @@ async def upsert_film_review(
         timestamp=datetime.datetime.now(),
     )
     if not result:
-        logging.error(f'failed to add review movie_id {film_review.movie_id}, user_id {film_review.user_id}')
+        logging.error('failed to add review movie_id %s, user_id %s', film_review.movie_id, film_review.user_id)
         raise HTTPException(status_code=HTTPStatus.BAD_REQUEST)
     return result
 
@@ -93,6 +93,6 @@ async def remove_film_review(
 ) -> FilmReview:
     result = await film_service.remove_film_review(film_id=film_review.movie_id, user_id=film_review.user_id)
     if not result:
-        logging.error(f'failed to delete review movie_id {film_review.movie_id}, user_id {film_review.user_id}')
+        logging.error('failed to delete review movie_id %s, user_id %s', film_review.movie_id, film_review.user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result

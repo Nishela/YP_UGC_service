@@ -16,7 +16,7 @@ settings = get_settings()
 async def send_event(event: EventModel, producer: AIOKafkaProducer = Depends(get_producer)) -> int:
     topic = settings.topics.get(event.event_name)
     if not topic:
-        logging.error(f'{event.event_name} not found')
+        logging.error(f'%s not found', event.event_name)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='event_name not found')
     await producer.send_and_wait(
         topic=topic,

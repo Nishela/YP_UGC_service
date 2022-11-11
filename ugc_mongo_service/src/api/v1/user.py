@@ -16,7 +16,7 @@ async def user_bookmarks(
 ) -> Bookmarks:
     bookmarks = await user_service.get_user_bookmarks(user_id)
     if not bookmarks:
-        logging.info(f'Cannot get user_bookmarks for user {user_id}')
+        logging.info('Cannot get user_bookmarks for user %s', user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return bookmarks
 
@@ -28,7 +28,7 @@ async def add_bookmark(
 ) -> Bookmark:
     result = await user_service.add_user_bookmark(film_id=bookmark.movie_id, user_id=bookmark.user_id)
     if not result:
-        logging.error(f'Cannot add bookmark for movie {bookmark.movie_id}, bookmark {bookmark.user_id}')
+        logging.error('Cannot add bookmark for movie %s, bookmark %s', bookmark.movie_id, bookmark.user_id)
         raise HTTPException(status_code=HTTPStatus.BAD_REQUEST)
     return result
 
@@ -40,6 +40,6 @@ async def remove_bookmark(
 ) -> Bookmark:
     result = await user_service.remove_user_bookmark(film_id=bookmark.movie_id, user_id=bookmark.user_id)
     if not result:
-        logging.error(f'Cannot delete bookmark for movie {bookmark.movie_id}, bookmark {bookmark.user_id}')
+        logging.error('Cannot delete bookmark for movie %s, bookmark %s', bookmark.movie_id, bookmark.user_id)
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
     return result

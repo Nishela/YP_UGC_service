@@ -37,9 +37,10 @@ class ETLClickhouse:
                 self.client.execute(INSERT_VALUES.format(self.db_name, event_name),
                                     payload,
                                     types_check=True)
-                logging.info(f'Success insert {len(payload)} entries in Clickhouse table {self.db_name}.{event_name}')
+                logging.info('Success insert %d entries in Clickhouse table %s.%s',
+                             len(payload), self.db_name, self.db_name)
                 return True
             except KeyError as _err:
-                logging.exception(f"Error inserting data to Clickhouse table {self.db_name}.{event_name}: {_err}")
+                logging.exception("Error inserting data to Clickhouse table %s.%s", self.db_name, event_name)
 
         return None

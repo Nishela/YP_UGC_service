@@ -30,8 +30,8 @@ def transform(data: ConsumerRecord) -> Optional[Tuple[str, Dict[str, str]]]:
         payload = EventModel(**consumer_data).dict()
 
         return payload['event_name'], payload
-    except Exception as transform_ex:
-        logging.error('Error while transforming data: {0}'.format(transform_ex))
+    except Exception as _err:
+        logging.exception('Error while transforming data')
         return None
 
 
