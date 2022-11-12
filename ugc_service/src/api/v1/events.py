@@ -12,7 +12,7 @@ router = APIRouter()
 settings = get_settings()
 
 
-@router.post('/send_event', response_model=HTTPStatus)
+@router.post('/send_event', response_model=HTTPStatus, summary='Add event to Kafka')
 async def send_event(event: EventModel, producer: AIOKafkaProducer = Depends(get_producer)) -> int:
     topic = settings.topics.get(event.event_name)
     if not topic:

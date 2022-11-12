@@ -4,8 +4,6 @@ from datetime import datetime
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import HTTPBearer
-from utils.token_decoder import get_token_payload
 
 from models.models import (
     FilmInfo,
@@ -16,9 +14,10 @@ from models.models import (
     FilmVoteFilter,
 )
 from services.movie import FilmService, get_film_service
+from utils.http_bearer_security import security
+from utils.token_decoder import get_token_payload
 
 router = APIRouter()
-security = HTTPBearer()
 
 
 @router.get("/{film_id}/likes", response_model=FilmInfo, summary='Show information about film rating')
