@@ -23,7 +23,7 @@ class FilmService:
         """Get film info by film id: likes, dislikes count and avg rating."""
         film = await self.votes_collection.find_one({"movie_id": film_id})
         if not film:
-            return None
+            return
         like = await self.votes_collection.count_documents(
             {"$and": [{"movie_id": film_id}, {"rating": {"$gt": 4}}]}
         )
@@ -58,7 +58,7 @@ class FilmService:
         if upserted_vote:
             return FilmVote.parse_obj(upserted_vote)
 
-        return None
+        return
 
     async def remove_film_vote(self, film_id: str, user_id: str) -> Optional[FilmVote]:
         """Remove vote from film by user id."""
@@ -69,14 +69,14 @@ class FilmService:
         if removed_vote:
             return FilmVote.parse_obj(removed_vote)
 
-        return None
+        return
 
     async def get_film_review_info(self, film_id: str, user_id: str) -> Optional[FilmReviewInfo]:
         """Get information about film review: text, timestamp, rating."""
         filtered = {"user_id": user_id, "movie_id": film_id}
         review = await self.reviews_collection.find_one(filtered)
         if not review:
-            return None
+            return
         votes = await self.votes_collection.find_one(filtered)
         rating = None
         if votes:
@@ -114,7 +114,7 @@ class FilmService:
         if upserted_review:
             return FilmReview.parse_obj(upserted_review)
 
-        return None
+        return
 
     async def remove_film_review(self, film_id: str, user_id: str) -> Optional[FilmReview]:
         """Find and remove film review by user_id and movie_id."""
@@ -125,7 +125,7 @@ class FilmService:
         if removed_review:
             return FilmReview.parse_obj(removed_review)
 
-        return None
+        return
 
 
 @lru_cache()

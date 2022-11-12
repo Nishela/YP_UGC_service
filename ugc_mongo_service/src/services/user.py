@@ -20,7 +20,7 @@ class UserService:
         """Get user bookmarks by user_id"""
         films = await self.collection.find_one({"user_id": user_id})
         if not films:
-            return None
+            return
         bookmarks = Bookmarks(user_id=user_id, movie_ids=[])
         cursor = self.collection.find({"user_id": user_id})
         for document in await cursor.to_list(length=100):
@@ -37,14 +37,14 @@ class UserService:
         await self.collection.insert_one({"user_id": user_id, "movie_id": film_id})
         return Bookmark(user_id=user_id, movie_id=film_id)
 
-    async def remove_user_bookmark(self, user_id: str, film_id: str) -> Optional[Bookmarks]:
+    async def remove_user_bookmark(self, user_id: str, film_id: str) -> Optional[Bookmark]:
         """Find and delete user bookmark by user_id and film_id."""
         bookmark = await self.collection.find_one_and_delete(
             {"$and": [{"movie_id": film_id}, {"user_id": user_id}]},
             projection={"_id": False},
         )
         if not bookmark:
-            return None
+            return
         return Bookmark(user_id=user_id, movie_id=film_id)
 
 

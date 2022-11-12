@@ -11,6 +11,7 @@ from db import mongo
 
 settings = get_settings()
 
+
 app = FastAPI(
     title=settings.app.project_name,
     version="1.0.0",
